@@ -120,6 +120,7 @@ public class EvenementService {
                 // Ajout des lignes
 
                 for (int i = 0; i < evenements.size(); i++) {
+                    String suivis = evenements.get(i).getSuivis() != null ? evenements.get(i).getSuivis() : "";
                     if (evenements.get(i).getNouvelleDate() != null) {
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getDate().toString())));
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getFormat())));
@@ -129,7 +130,7 @@ public class EvenementService {
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getObjectif())));
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getStatut())));
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getNouvelleDate().toString())));
-                        table.addCell(new Cell().add(new Paragraph(evenements.get(i).getSuivis())));
+                        table.addCell(new Cell().add(new Paragraph(suivis)));
                     } else {
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getDate().toString())));
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getFormat())));
@@ -139,7 +140,7 @@ public class EvenementService {
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getObjectif())));
                         table.addCell(new Cell().add(new Paragraph(evenements.get(i).getStatut())));
                         table.addCell(new Cell().add(new Paragraph("")));
-                        table.addCell(new Cell().add(new Paragraph(evenements.get(i).getSuivis())));
+                        table.addCell(new Cell().add(new Paragraph(suivis)));
                     }
                 }
 
