@@ -118,8 +118,8 @@ public class UserService implements UserDetailsService {
 
         // User1 user = userRepository.findByUsername(username);
         User1 user = new User1();
-        user.setUsername("admirl");
-        user.setPassword(new PasswordEncryptionService().encrypPassword("admirl2"));
+        user.setUsername("agenda");
+        user.setPassword(new PasswordEncryptionService().encrypPassword("agenda"));
         user.setRole("ADMIN");
         System.out.println("===========================Username:" + user.getUsername());
 
