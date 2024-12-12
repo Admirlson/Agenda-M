@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.manda.agenda.dto.EvenementDTO;
 import com.manda.agenda.services.EvenementService;
 import com.manda.agenda.services.UserService;
+import com.manda.agenda.utilitaires.PasswordEncryptionService;
 
 @Controller
 public class FormeController {
@@ -69,7 +70,7 @@ public class FormeController {
         return "modifierEvenement";
     }
 
-    @PostMapping("/admin/saveEvenement")
+    @PostMapping("/user/saveEvenement")
     String saveEvenement(@ModelAttribute EvenementDTO evenement, Model model, Principal principal) {
 
         try {
@@ -90,7 +91,7 @@ public class FormeController {
         return "listeEvenement";
     }
 
-    @PostMapping("/admin/modifierEvenement")
+    @PostMapping("/user/modifierEvenement")
     String modifierEvenement(@ModelAttribute EvenementDTO evenement, Model model, Principal principal) {
         evenement.setStatut("Reporté");
         evenement.setWhomodified("admirl");
@@ -101,7 +102,7 @@ public class FormeController {
         return "redirect:/listeEvenement";
     }
 
-    @PostMapping("/admin/annulerEvenement")
+    @PostMapping("/user/annulerEvenement")
     String anuulerEvenement(@RequestParam("id") int id, Model model, Principal principal) {
         EvenementDTO evenement = evenementService.getEvenement(id);
         System.out.println("Id de l'evenement===========" + evenement.getId());
@@ -115,7 +116,7 @@ public class FormeController {
         return "redirect:/listeEvenement";
     }
 
-    @PostMapping("/admin/terminerEvenement")
+    @PostMapping("/user/terminerEvenement")
     String terminerEvenement(@RequestParam("id") int id, @RequestParam("statut") String statut, Model model,
             Principal principal) {
         if (statut.equals("Terminé")) {
@@ -131,7 +132,7 @@ public class FormeController {
         return "listeEvenement";
     }
 
-    @PostMapping("/admin/validerTerminerEvenement")
+    @PostMapping("/user/validerTerminerEvenement")
     String validerTerminerEvenement(@RequestParam("id") int id, @RequestParam("suivis") String suivis, Model model,
             Principal principal) {
         System.out.println("Id de l'evenement===========" + id);
@@ -149,7 +150,7 @@ public class FormeController {
     /**
      * @return
      */
-    @GetMapping("/admin/generatPdf")
+    @GetMapping("/user/generatPdf")
     public ResponseEntity<byte[]> generatePdf() {
         byte[] liste = null;
         try {
@@ -176,7 +177,7 @@ public class FormeController {
                 .header("Content-Disposition", "inline; filename=raport.pdf").body(liste);
     }
 
-    @GetMapping("/admin/generatCsv")
+    @GetMapping("/user/generatCsv")
     public ResponseEntity<byte[]> generateCsv() {
         byte[] liste = null;
         try {
@@ -192,6 +193,30 @@ public class FormeController {
 
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN)
                 .header("Content-Disposition", "attachment; filename=raport.csv").body(liste);
+    }
+
+    @PostMapping("/user/formModifierPassword")
+    public String formModiierPassword(@RequestParam("username") String username, Model model, Principal principal) {
+        model.addAttribute("username", username);
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        return "modifierPassword";
+    }
+
+    @PostMapping("/user/modifierPassword")
+    public String modifierPasswordUser(@RequestParam("password") String password,
+            @RequestParam("password2") String password2,
+            @RequestParam("username") String username, Model model, Principal principal) {
+        if (password.equals(password2)) {
+            userService.modifierPassword(new PasswordEncryptionService().encrypPassword(password), username);
+            return "login";
+        } else {
+            model.addAttribute("message", "Les deux mots de passe entrés ne sont pas identiques");
+            model.addAttribute("username", principal.getName());
+            model.addAttribute("prenom", userService.getPrenomUser());
+            return "modifierPassword";
+        }
+
     }
 
 }

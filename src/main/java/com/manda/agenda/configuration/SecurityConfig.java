@@ -26,7 +26,6 @@ public class SecurityConfig {
 
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/h2-console").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/user/**")
                 .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated())

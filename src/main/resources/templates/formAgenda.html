@@ -35,7 +35,7 @@
                           <a class="nav-link" href="/listeEvenement">Liste des évènements</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/listUser">Nouveau utilisateur</a>
+                            <a class="nav-link" href="/user/listUser">Nouveau utilisateur</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" onclick="ouvrirModal()" >Exporter</a>
@@ -58,7 +58,7 @@
                                         <form action="" method="post">
                                         <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                         <input type="hidden" name="username" th:value="${username}">
-                                        <button type="submit" formaction="/admin/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
+                                        <button type="submit" formaction="/user/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
                                         </form>
                                     </a>
                                     <a class="nav-link " href="/login" >Deconnexion</a>
@@ -73,52 +73,78 @@
             </nav>
         </header>
 
-        <p>Remplissez tous les champs ci-dessous</p>
-        <form action="/admin/saveEvenement" method="post">
-            <div class="mb-3 input-group">
+        <section>
+            <p>Remplissez tous les champs ci-dessous</p>
+        <form action="/user/saveEvenement" method="post">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+            <div class="row">                
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="text" class="form-control" th:name="date" id="date" required>
+                        <span class="input-group-text d-none d-md-block" id="basic-addon4" style="background-color: whitesmoke; border-radius: 0%; display: flex;justify-content: center;align-items: center;">
+                                <i class="bi bi-calendar" ></i>
+                        </span>
+                    </div>
+                </div>
 
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
-
-                <label for="date" class="form-label">Date</label>
-                <input type="text" class="form-control" th:name="date" id="date" required>
-                <span class="input-group-text" id="basic-addon4" style="background-color: black; border-radius: 0%; display: flex;justify-content: center;align-items: center;">
-                        <i class="bi bi-calendar" ></i>
-                </span>
-    
-                <label for="format" class="form-label">Format</label>
-                <select name="format" id="format" class="form-control">
-                    <option value="En ligne">En ligne</option>
-                    <option value="Présentiel">Présentiel</option>
-                </select>
-    
-            </div>
-    
-            <div class="mb-3 input-group">
-                <label for="type" class="form-label">Type</label>
-                <select name="type" id="type" class="form-control">
-                    <option value="Interne">Interne</option>
-                    <option value="Externe">Externe</option>
-                </select>
-    
-                <label for="heure" class="form-label">Heure</label>
-                <input type="text" th:name="heure" class="form-control form-text" id="heure" required>
-            </div>
-    
-            <div class="mb-3 input-group">
-                <label for="institution" class="form-label">Institution</label>
-                <input type="text" th:name="institution" class="form-control form-text" id="institution" >
-    
-                <label for="objectif" class="form-label">Objectif</label>
-                <textarea name="objectif" id="objectif"></textarea>
+                <div class="col-md-6">                    
+                    <div class="input-group">
+                        <label for="format" class="form-label">Format</label>
+                        <select name="format" id="format" class="form-control">
+                            <option value="En ligne">En ligne</option>
+                            <option value="Présentiel">Présentiel</option>
+                        </select>
+                    </div>
+                </div>               
             </div>
 
-            <div class="mb-3 input-group">
-                <!-- <label for="suivis" class="form-label">Suivis</label>
-                <textarea name="suivis" id="suivis"></textarea> -->
-                <button type="submit">Enregistrer</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="type" class="form-label">Type</label>
+                        <select name="type" id="type" class="form-control">
+                            <option value="Interne">Interne</option>
+                            <option value="Externe">Externe</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="heure" class="form-label">Heure</label>
+                        <input type="text" th:name="heure" class="form-control form-text" id="heure" required>
+                    </div>
+                </div>
+
             </div>
+    
+    
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="institution" class="form-label">Institution</label>
+                        <input type="text" th:name="institution" class="form-control form-text" id="institution" >
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label for="objectif" class="form-label">Objectif</label>
+                        <textarea name="objectif" id="objectif" class="form-control"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                </div>
+            </div>            
+
         </form>
 
+        </section>
 
         <footer style="text-align: center;background-color: red;">
             <p> © 2024 Ministère de l'Économie et des Finances</p>

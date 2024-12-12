@@ -46,6 +46,7 @@ public class UserController {
             Model model, Principal principal) {
         System.out.println("Utilisateur connecté......" + principal.getName());
         System.out.println("Last name......" + userDTO.getLastName());
+        System.out.println("Id......" + userDTO.getId());
         if (userDTO.getPassword().equals(password2)) {
             userDTO.setWhoCreated(principal.getName());
             userDTO.setPassword(new PasswordEncryptionService().encrypPassword(userDTO.getPassword()));
@@ -95,30 +96,6 @@ public class UserController {
             model.addAttribute("username", principal.getName());
             model.addAttribute("prenom", userService.getPrenomUser());
             return "modifierUser";
-        }
-
-    }
-
-    @PostMapping("/formModifierPassword")
-    public String formModiierPassword(@RequestParam("username") String username, Model model, Principal principal) {
-        model.addAttribute("username", username);
-        model.addAttribute("username", principal.getName());
-        model.addAttribute("prenom", userService.getPrenomUser());
-        return "modifierPassword";
-    }
-
-    @PostMapping("/modifierPassword")
-    public String modifierPasswordUser(@RequestParam("password") String password,
-            @RequestParam("password2") String password2,
-            @RequestParam("username") String username, Model model, Principal principal) {
-        if (password.equals(password2)) {
-            userService.modifierPassword(new PasswordEncryptionService().encrypPassword(password), username);
-            return "login";
-        } else {
-            model.addAttribute("message", "Les deux mots de passe entrés ne sont pas identiques");
-            model.addAttribute("username", principal.getName());
-            model.addAttribute("prenom", userService.getPrenomUser());
-            return "modifierPassword";
         }
 
     }

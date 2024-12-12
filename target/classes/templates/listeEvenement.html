@@ -54,7 +54,7 @@
                                             <form action="" method="post">
                                             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                             <input type="hidden" name="username" th:value="${username}">
-                                            <button type="submit" formaction="/admin/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
+                                            <button type="submit" formaction="/user/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
                                             </form>
                                         </a>
                                         <a class="nav-link " href="/login" >Deconnexion</a>
@@ -77,8 +77,8 @@
                         </div>
                             <button onclick="ouvrirModal()" id="export">Exporter</button>
                         
-                        <div class="input-group">
-                            <table class="table table-striped table-bordered">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">Date</th>
@@ -107,7 +107,7 @@
                                             <form action="" method="post">
                                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                                 <input type="hidden" name="id" th:value="${evenement.id}">
-                                                <button formaction="/admin/annulerEvenement">Annuler</button>
+                                                <button formaction="/user/annulerEvenement">Annuler</button>
                                             </form>
                                            <form action="">
                                                 <input type="hidden" name="id" th:value="${evenement.id}">
@@ -121,7 +121,7 @@
                                             </div>
                                         </td>
                                         <td th:if="${evenement.statut == 'Planifié'}">
-                                            <form action="/admin/terminerEvenement" method="post">
+                                            <form action="/user/terminerEvenement" method="post">
                                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                                 <input type="hidden" name="id" th:value="${evenement.id}">
                                                 <div class="form-check form-switch">
@@ -130,7 +130,7 @@
                                             </form>
                                         </td>
                                         <td th:if="${evenement.statut == 'Reporté'}">
-                                            <form action="/admin/terminerEvenement" method="post">
+                                            <form action="/user/terminerEvenement" method="post">
                                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                                 <input type="hidden" name="id" th:value="${evenement.id}">
                                                 <div class="form-check form-switch">
@@ -175,8 +175,8 @@
             </div>
             <form method="get" target="_blank">
                 <div class="modal-footer">
-                    <button type="submit" formaction="/admin/generatPdf" class="btn btn-secondary">PDF</button>
-                    <button type="submit" formaction="/admin/generatCsv" class="btn btn-primary">CSV</button>
+                    <button type="submit" formaction="/user/generatPdf" class="btn btn-secondary">PDF</button>
+                    <button type="submit" formaction="/user/generatCsv" class="btn btn-primary">CSV</button>
                 </div>
             </form>
           </div>
@@ -205,7 +205,7 @@
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                     <input type="hidden" name="id" id="id" th:value="${evenementId}">
                     <textarea name="suivis" id="" placeholder="Suivis" required></textarea >
-                    <button formaction="/admin/validerTerminerEvenement" class="btn btn-secondary">Continuer</button>
+                    <button formaction="/user/validerTerminerEvenement" class="btn btn-secondary">Continuer</button>
                     <button onclick="fermetureModalTerminerEvenement()" formaction="/annuler" class="btn btn-primary">Annuler</button>
                 </div>
             </form>

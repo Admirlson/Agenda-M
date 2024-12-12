@@ -19,7 +19,6 @@ import com.manda.agenda.dto.UserDTO;
 import com.manda.agenda.mappers.UserMapper;
 import com.manda.agenda.models.User1;
 import com.manda.agenda.repositories.UserRepository;
-import com.manda.agenda.utilitaires.PasswordEncryptionService;
 
 import jakarta.transaction.Transactional;
 
@@ -116,17 +115,18 @@ public class UserService implements UserDetailsService {
         // user.setRole("ADMIN");
         // user.setPassword(new PasswordEncryptionService().encrypPassword("admirl2"));
 
-        // User1 user = userRepository.findByUsername(username);
-        User1 user = new User1();
-        user.setUsername("agenda");
-        user.setPassword(new PasswordEncryptionService().encrypPassword("agenda"));
-        user.setRole("ADMIN");
-        System.out.println("===========================Username:" + user.getUsername());
+        User1 user = userRepository.findByUsername(username);
+        // User1 user = new User1();
+        // user.setUsername("agenda");
+        // user.setPassword(new PasswordEncryptionService().encrypPassword("agenda"));
+        // user.setRole("ADMIN");
+        // System.out.println("===========================Username:" +
+        // user.getUsername());
 
         // User user = userRepository.findByUsername(username);
 
         if (user == null) {
-            System.out.println("===========================dkddkdkd");
+            System.out.println("User est null===========================dkddkdkd");
             throw new UsernameNotFoundException("User not found");
         }
         prenom = user.getFirstName();

@@ -35,7 +35,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="/admin/listUser">Nouveau utilisateur</a>
+                                <a class="nav-link" href="/user/listUser">Nouveau utilisateur</a>
                             </li>
     
                             <!-- <li class="nav-item">
@@ -54,7 +54,7 @@
                                       <form action="" method="post">
                                       <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                                       <input type="hidden" name="username" th:value="${username}">
-                                      <button type="submit" formaction="/admin/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
+                                      <button type="submit" formaction="/user/formModifierPassword" style="background-color: rgb(65, 65, 244); border: none;">Modifier mot de passe</button>
                                       </form>
                                   </a>
                                   <a class="nav-link " href="/login" >Deconnexion</a>
