@@ -99,6 +99,7 @@ public class FormeController {
         evenementService.modifier(evenement);
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOs());
         return "redirect:/listeEvenement";
     }
 
@@ -113,6 +114,7 @@ public class FormeController {
         evenementService.modifier(evenement);
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOs());
         return "redirect:/listeEvenement";
     }
 
@@ -144,6 +146,7 @@ public class FormeController {
         evenementService.modifier(evenement);
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOs());
         return "redirect:/listeEvenement";
     }
 
@@ -200,6 +203,7 @@ public class FormeController {
         model.addAttribute("username", username);
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+        model.addAttribute("first", "Non");
         return "modifierPassword";
     }
 
@@ -219,4 +223,95 @@ public class FormeController {
 
     }
 
+    @GetMapping("/first/formModifierPassword")
+    public String formModiierPasswordFirstConnection(Model model,
+            Principal principal) {
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        model.addAttribute("first", "Oui");
+        return "modifierPasswordFirstConnection";
+    }
+
+    @PostMapping("/first/modifierPassword")
+    public String modifierPasswordUserFirstConnection(@RequestParam("password") String password,
+            @RequestParam("password2") String password2,
+            @RequestParam("username") String username, Model model, Principal principal) {
+
+        if (password.equals(password2)) {
+            userService.modifierPasswordPourPremiereConnexion(new PasswordEncryptionService().encrypPassword(password),
+                    "Non", username);
+
+            return "login";
+        } else {
+            model.addAttribute("message", "Les deux mots de passe entrés ne sont pas identiques");
+            model.addAttribute("username", principal.getName());
+            model.addAttribute("prenom", userService.getPrenomUser());
+            System.out.println("username====================11111111===" + username);
+            return "modifierPasswordFirstConnection";
+        }
+
+    }
+
+    @GetMapping("/user/evenement/planifer")
+    public String evenementPlanifie(Model model, Principal principal) {
+        System.out.println("Prenom de l'utilisateur====================" + userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOParStatut("Planifié"));
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        return "listeEvenementPlanifie";
+    }
+
+    @GetMapping("/user/evenement/reporter")
+    public String evenementReporte(Model model, Principal principal) {
+        System.out.println("Prenom de l'utilisateur====================" + userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOParStatut("Reporté"));
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        return "listeEvenementReporte";
+    }
+
+    @GetMapping("/user/evenement/annuler")
+    public String evenementAnnule(Model model, Principal principal) {
+        System.out.println("Prenom de l'utilisateur====================" + userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOParStatut("Annulé"));
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        return "listeEvenementAnnule";
+    }
+
+    @GetMapping("/user/generatPdfParStatut")
+    public ResponseEntity<byte[]> generatePdfParStatut(@RequestParam("statut") String statut) {
+        byte[] liste = null;
+        try {
+
+            liste = evenementService.listeEvenement(evenementService.listEvenementDTOParStatut(statut));
+            // evenementService.sendReminders(evenementService.listEvenementDTOs());
+            System.out.println("Apres sendReminders");
+            if (liste != null) {
+                System.out.println("Liste n'est pas nulle");
+            }
+
+        } catch (Exception ex) {
+        }
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                .header("Content-Disposition", "inline; filename=raport.pdf").body(liste);
+    }
+
+    @GetMapping("/user/generatCsvParStatut")
+    public ResponseEntity<byte[]> generateCsvParStatut(@RequestParam("statut") String statut) {
+        byte[] liste = null;
+        try {
+            liste = evenementService.generateCsv(evenementService.listEvenementDTOParStatut(statut));
+            if (liste != null) {
+                System.out.println("Liste n'est pas nulle");
+            }
+
+        } catch (Exception ex) {
+        }
+        // return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+        // .header("Content-Disposition", "inline; filename=raport.pdf").body(liste);
+
+        return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN)
+                .header("Content-Disposition", "attachment; filename=raport.csv").body(liste);
+    }
 }

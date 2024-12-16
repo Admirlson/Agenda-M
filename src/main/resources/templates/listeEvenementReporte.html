@@ -78,9 +78,9 @@
                             <!-- <button onclick="ouvrirModal()" id="export">Exporter</button> -->
                         <div class="input-group">
                             <form action="">
-                                <button formaction="/listeEvenement" style="background-color: blue;color: white; border: none;">Tous</button>
+                                <button formaction="/listeEvenement">Tous</button>
                                 <button formaction="/user/evenement/planifer">Planifiés</button>
-                                <button formaction="/user/evenement/reporter">Reportés</button>
+                                <button formaction="/user/evenement/reporter" style="background-color: blue;color: white; border: none;">Reportés</button>
                                 <button formaction="/user/evenement/annuler">Annulés</button>
                             </form>
                         </div>
@@ -156,7 +156,7 @@
                     </div>
         
                     <div th:if="${#lists.isEmpty(evenements)}">
-                        <p>Aucun evènement<a href="/formAgenda">Ajouter evènement</a></p>
+                        <p>Aucun evènement reporté<a href="/formAgenda">Ajouter evènement</a></p>
         
                     </div>
                 </div>
@@ -182,8 +182,9 @@
             </div>
             <form method="get" target="_blank">
                 <div class="modal-footer">
-                    <button type="submit" formaction="/user/generatPdf" class="btn btn-secondary">PDF</button>
-                    <button type="submit" formaction="/user/generatCsv" class="btn btn-primary">CSV</button>
+                    <input type="hidden" name="statut" th:value="Reporté">
+                    <button type="submit" formaction="/user/generatPdfParStatut" class="btn btn-secondary">PDF</button>
+                    <button type="submit" formaction="/user/generatCsvParStatut" class="btn btn-primary">CSV</button>
                 </div>
             </form>
           </div>

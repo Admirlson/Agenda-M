@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.manda.agenda.handlers.CustomAuthenticationHandle;
 import com.manda.agenda.services.UserService;
 
 @Configuration
@@ -26,12 +27,14 @@ public class SecurityConfig {
 
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/first/**").hasRole("FIRST_LOGIN")
                 .requestMatchers("/admin/**").hasRole("ADMIN").requestMatchers("/user/**")
                 .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated())
                 .formLogin(
                         form -> form.loginPage("/login").loginProcessingUrl("/connect")
-                                .defaultSuccessUrl("/listeEvenement", true)
+                                .successHandler(new CustomAuthenticationHandle())
+                                // .defaultSuccessUrl("/listeEvenement", true)
                                 .permitAll())
 
                 .logout(logout -> logout.permitAll()).userDetailsService(userService);

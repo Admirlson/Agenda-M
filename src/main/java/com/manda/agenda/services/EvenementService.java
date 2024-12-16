@@ -18,16 +18,19 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.event.PdfDocumentEvent;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.manda.agenda.dto.EvenementDTO;
 import com.manda.agenda.mappers.EvenementMapper;
 import com.manda.agenda.models.Evenement;
 import com.manda.agenda.repositories.EvenementRepository;
+import com.manda.agenda.utilitaires.HeaderEventHandler;
 
 @Service
 public class EvenementService {
@@ -82,6 +85,7 @@ public class EvenementService {
         return evenementDTOs;
     }
 
+    @SuppressWarnings("resource")
     public byte[] listeEvenement(List<EvenementDTO> evenements) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
@@ -92,16 +96,39 @@ public class EvenementService {
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
             pdfDocument.setDefaultPageSize(landscape);
 
-            try (Document document = new Document(pdfDocument)) {
+            String image = "static/images/logo.png";
+            String imageRight = "static/images/logo.png";
 
-                Paragraph ENTETE1 = new Paragraph("MINISTÈRE DE L'ÉCONOMIE ET DES FINANCES(MEF)")
-                        .setTextAlignment(TextAlignment.CENTER).setFontSize(15);
+            // InputStream inputStream =
+            // getClass().getClassLoader().getResourceAsStream("static/images/logo.png");
+            // if (inputStream == null) {
+            // throw new FileNotFoundException("L'image n'a pas été
+            // trouvé==897977979=====");
+            // }
+
+            try (Document document = new Document(pdfDocument)) {
+                document.setTopMargin(100);
+                // Paragraph ENTETE1 = new Paragraph(
+                // "MINISTÈRE DE L'ÉCONOMIE ET DES FINANCES(MEF)\nBureau du Ministre\nAgenda du
+                // Ministre")
+                // .setTextAlignment(TextAlignment.CENTER).setFontSize(16);
+
+                Paragraph ENTETE1 = new Paragraph().add(new Text("MINISTÈRE DE L'ÉCONOMIE ET DES FINANCES(MEF)\n")
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER).setFontSize(16))
+                        .add(new Text("Bureau du Ministre\n")
+                                .setHorizontalAlignment(HorizontalAlignment.CENTER).setFontSize(14))
+                        .add(new Text("Agenda du Ministre")
+                                .setHorizontalAlignment(HorizontalAlignment.CENTER).setFontSize(12))
+                        .setTextAlignment(TextAlignment.CENTER);
                 Paragraph ENTETE2 = new Paragraph("Bureau du Ministre").setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(14);
                 Paragraph ENTETE3 = new Paragraph("Agenda du Ministre").setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(12);
 
                 float[] longueColonne = { 3, 3, 3, 3, 3, 8, 3, 3, 5 };
+
+                pdfDocument.addEventHandler(PdfDocumentEvent.START_PAGE,
+                        new HeaderEventHandler(image, imageRight, ENTETE1));
 
                 // Creation de la table
                 Table table = new Table(longueColonne).setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -144,9 +171,9 @@ public class EvenementService {
                     }
                 }
 
-                document.add(ENTETE1);
-                document.add(ENTETE2);
-                document.add(ENTETE3);
+                // document.add(ENTETE1);
+                // document.add(ENTETE2);
+                // document.add(ENTETE3);
                 document.add(table);
             }
 
@@ -267,4 +294,28 @@ public class EvenementService {
         }
 
     }
+
+    public List<EvenementDTO> listEvenementDTOParStatut(String statut) {
+        List<Evenement> evenements = evenementRepository.findByStatut(statut);
+        List<EvenementDTO> evenementDTOs = new ArrayList<EvenementDTO>();
+        for (Evenement evenement : evenements) {
+            evenementDTOs.add(evenementMapper.toEvenementDTO(evenement));
+        }
+        return evenementDTOs;
+    }
+
+    /**
+     * @return JavaMailSender return the mailSender
+     */
+    public JavaMailSender getMailSender() {
+        return mailSender;
+    }
+
+    /**
+     * @param mailSender the mailSender to set
+     */
+    public void setMailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
 }

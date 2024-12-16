@@ -143,7 +143,13 @@ public class UserService implements UserDetailsService {
 
     public Collection<? extends GrantedAuthority> getAuthorities(User1 user) {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
+        System.out.println("First connection===========" + user.getFirstConnection());
+        if (user.getFirstConnection().equals("Oui")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_FIRST_LOGIN"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
+        }
+
         return authorities;
     }
 
@@ -166,6 +172,11 @@ public class UserService implements UserDetailsService {
     @Transactional
     public int modifierPassword(String password, String username) {
         return userRepository.updatePassword(password, username);
+    }
+
+    @Transactional
+    public int modifierPasswordPourPremiereConnexion(String password, String firstConnection, String username) {
+        return userRepository.updatePasswordForFirstLogin(password, firstConnection, username);
     }
 
 }
