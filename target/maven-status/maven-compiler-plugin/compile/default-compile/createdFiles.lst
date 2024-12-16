@@ -11,6 +11,8 @@ com\manda\agenda\utilitaires\PasswordEncryptionService.class
 com\manda\agenda\mappers\EvenementMapper.class
 com\manda\agenda\services\UserService.class
 com\manda\agenda\Agenda1Application.class
+com\manda\agenda\utilitaires\HeaderEventHandler.class
+com\manda\agenda\handlers\CustomAuthenticationHandle.class
 com\manda\agenda\repositories\UserRepository.class
 com\manda\agenda\mappers\UserMapper.class
 com\manda\agenda\mappers\UserConfigMapper.class

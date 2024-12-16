@@ -4,6 +4,7 @@ E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\controll
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\controller\UserController.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\dto\EvenementDTO.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\dto\UserDTO.java
+E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\handlers\CustomAuthenticationHandle.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\mappers\EvenementConfigMapper.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\mappers\EvenementMapper.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\mappers\EvenementMapperImpl.java
@@ -16,4 +17,5 @@ E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\reposito
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\repositories\UserRepository.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\services\EvenementService.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\services\UserService.java
+E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\utilitaires\HeaderEventHandler.java
 E:\workspace\Les Projets\VS Code\agenda1\src\main\java\com\manda\agenda\utilitaires\PasswordEncryptionService.java
