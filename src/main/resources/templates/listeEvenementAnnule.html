@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <div th:replace="base-inactivity :: base"></div>
 </head>
 <body>
   
@@ -78,9 +79,9 @@
                             <!-- <button onclick="ouvrirModal()" id="export">Exporter</button> -->
                         <div class="input-group">
                             <form action="">
-                                <button formaction="/listeEvenement">Tous</button>
-                                <button formaction="/user/evenement/planifer">Planifiés</button>
-                                <button formaction="/user/evenement/reporter">Reportés</button>
+                                <button formaction="/listeEvenement" style="border: none;">Tous</button>
+                                <button formaction="/user/evenement/planifer" style="border: none;">Planifiés</button>
+                                <button formaction="/user/evenement/reporter" style="border: none;">Reportés</button>
                                 <button formaction="/user/evenement/annuler" style="background-color: blue;color: white;border: none;">Annulés</button>
                             </form>
                         </div>

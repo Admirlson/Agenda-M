@@ -51,7 +51,7 @@ public class HeaderEventHandler extends AbstractPdfDocumentEventHandler {
             // Positionnement de l'image
 
             // Marge gauche
-            float x = 36;
+            float x = 76;
 
             // Position depuis le haut
             float y = pdfPage.getPageSize().getTop() - 80;
@@ -74,7 +74,7 @@ public class HeaderEventHandler extends AbstractPdfDocumentEventHandler {
             // Positionnement de l'image
 
             // Marge gauche
-            float xRight = 740;
+            float xRight = 700;
 
             // Position depuis le haut
             float yRight = pdfPage.getPageSize().getTop() - 80;

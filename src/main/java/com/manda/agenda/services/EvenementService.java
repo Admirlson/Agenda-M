@@ -120,7 +120,9 @@ public class EvenementService {
                         .add(new Text("Agenda du Ministre")
                                 .setHorizontalAlignment(HorizontalAlignment.CENTER).setFontSize(12))
                         .setTextAlignment(TextAlignment.CENTER);
-                Paragraph ENTETE2 = new Paragraph("Bureau du Ministre").setTextAlignment(TextAlignment.CENTER)
+                Paragraph ENTETE2 = new Paragraph(
+                        "Listes des Évènements " + evenements.get(0).getStatut().toLowerCase() + "s")
+                        .setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(14);
                 Paragraph ENTETE3 = new Paragraph("Agenda du Ministre").setTextAlignment(TextAlignment.CENTER)
                         .setFontSize(12);
@@ -172,7 +174,7 @@ public class EvenementService {
                 }
 
                 // document.add(ENTETE1);
-                // document.add(ENTETE2);
+                document.add(ENTETE2);
                 // document.add(ENTETE3);
                 document.add(table);
             }

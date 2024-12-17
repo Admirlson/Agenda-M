@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js"></script>
+    <div th:replace="base-inactivity :: base"></div>
 </head>
 <body>
   
@@ -27,7 +28,7 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                              <a class="nav-link active" aria-current="page" href="/formAgenda">Ajouter un évènement</a>
+                              <a class="nav-link" aria-current="page" href="/formAgenda">Ajouter un évènement</a>
                             <li class="nav-item">
                             </li>
                             <li class="nav-item">
@@ -35,7 +36,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="/user/listUser">Nouveau utilisateur</a>
+                                <a class="nav-link active" href="/user/listUser">Nouveau utilisateur</a>
                             </li>
     
                             <!-- <li class="nav-item">

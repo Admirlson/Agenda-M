@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.manda.agenda.handlers.CustomAuthenticationHandle;
 import com.manda.agenda.services.UserService;
@@ -37,7 +38,9 @@ public class SecurityConfig {
                                 // .defaultSuccessUrl("/listeEvenement", true)
                                 .permitAll())
 
-                .logout(logout -> logout.permitAll()).userDetailsService(userService);
+                .logout(logout -> logout.logoutSuccessUrl("/login").permitAll()).userDetailsService(userService)
+                .sessionManagement().invalidSessionUrl("/login")
+                .maximumSessions(1).expiredUrl("/login");
         // .csrf().disable().headers().frameOptions().disable()
         return http.build();
     }
@@ -52,5 +55,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 }
