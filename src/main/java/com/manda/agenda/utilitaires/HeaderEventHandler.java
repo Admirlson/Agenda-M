@@ -19,9 +19,11 @@ import com.itextpdf.layout.element.Paragraph;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class HeaderEventHandler extends AbstractPdfDocumentEventHandler {
     private final String path;
     private final String pathRight;

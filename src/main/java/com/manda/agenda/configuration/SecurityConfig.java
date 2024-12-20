@@ -33,14 +33,14 @@ public class SecurityConfig {
                 .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated())
                 .formLogin(
-                        form -> form.loginPage("/login").loginProcessingUrl("/connect")
+                        form -> form.loginPage("/").loginProcessingUrl("/connect")
                                 .successHandler(new CustomAuthenticationHandle())
                                 // .defaultSuccessUrl("/listeEvenement", true)
                                 .permitAll())
 
-                .logout(logout -> logout.logoutSuccessUrl("/login").permitAll()).userDetailsService(userService)
-                .sessionManagement().invalidSessionUrl("/login")
-                .maximumSessions(1).expiredUrl("/login");
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll()).userDetailsService(userService)
+                .sessionManagement().invalidSessionUrl("/")
+                .maximumSessions(1).expiredUrl("/");
         // .csrf().disable().headers().frameOptions().disable()
         return http.build();
     }

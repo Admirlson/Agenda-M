@@ -200,7 +200,7 @@ public class EvenementService {
                 String nouvelleDate = event.getNouvelleDate() != null ? String.valueOf(event.getNouvelleDate()) : "";
 
                 writer.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s%n", event.getDate().toString(), event.getFormat(),
-                        event.getType(), event.getHeure(), event.getInstitution(), event.getObjectif(),
+                        event.getType(), event.getHeure(), formatText(event.getInstitution()), event.getObjectif(),
                         event.getStatut(), nouvelleDate, event.getSuivis());
                 writer.flush();
 
@@ -318,6 +318,19 @@ public class EvenementService {
      */
     public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    private String formatText(String text) {
+        if (text != null) {
+            for (int i = 0; i < text.length(); i++) {
+                if (text.charAt(i) == ',') {
+                    text = text.replace(",", " ");
+                }
+            }
+        } else {
+            text = "";
+        }
+        return text;
     }
 
 }

@@ -30,7 +30,7 @@ public class FormeController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/")
     String login() {
         return "login";
     }
