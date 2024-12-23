@@ -214,13 +214,6 @@ public class EvenementService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    // public void sendReminders(List<EvenementDTO> evenements) {
-    // LocalDateTime tomorrowStart =
-    // LocalDateTime.now().plusDays(1).withHour(0).withMinute(0).withSecond(0);
-    // LocalDateTime tomorrowEnd = tomorrowStart.plusDays(1).minusSeconds(0);
-
-    // }
-
     @SuppressWarnings("null")
     public List<EvenementDTO> listEvenementDTOs(List<EvenementDTO> listEvenementDTOs) {
         LocalDate tomorrowStart = LocalDate.now().plusDays(1);
@@ -229,15 +222,19 @@ public class EvenementService {
         try {
             list = new ArrayList<EvenementDTO>();
             for (int i = 0; i < listEvenementDTOs.size(); i++) {
-                list.add(new EvenementDTO(listEvenementDTOs.get(i).getId(), listEvenementDTOs.get(i).getDate(),
-                        listEvenementDTOs.get(i).getFormat(), listEvenementDTOs.get(i).getType(),
-                        listEvenementDTOs.get(i).getHeure(), listEvenementDTOs.get(i).getInstitution(),
-                        listEvenementDTOs.get(i).getObjectif(), listEvenementDTOs.get(i).getStatut(),
-                        listEvenementDTOs.get(i).getNouvelleDate(), listEvenementDTOs.get(i).getSuivis(),
-                        listEvenementDTOs.get(i).getWhocreated(), listEvenementDTOs.get(i).getDatecreated(),
-                        listEvenementDTOs.get(i).getWhomodified(), listEvenementDTOs.get(i).getDatemodified(),
-                        listEvenementDTOs.get(i).isReminderSent()));
+                if (!listEvenementDTOs.get(i).isReminderSent()) {
+                    list.add(new EvenementDTO(listEvenementDTOs.get(i).getId(), listEvenementDTOs.get(i).getDate(),
+                            listEvenementDTOs.get(i).getFormat(), listEvenementDTOs.get(i).getType(),
+                            listEvenementDTOs.get(i).getHeure(), listEvenementDTOs.get(i).getInstitution(),
+                            listEvenementDTOs.get(i).getObjectif(), listEvenementDTOs.get(i).getStatut(),
+                            listEvenementDTOs.get(i).getNouvelleDate(), listEvenementDTOs.get(i).getSuivis(),
+                            listEvenementDTOs.get(i).getWhocreated(), listEvenementDTOs.get(i).getDatecreated(),
+                            listEvenementDTOs.get(i).getWhomodified(), listEvenementDTOs.get(i).getDatemodified(),
+                            listEvenementDTOs.get(i).isReminderSent()));
+                }
             }
+            // System.out.println("Size de la liste qu'on a pas encore envoyé de
+            // notfication====" + list.size());
 
         } catch (Exception ex) {
         }
@@ -258,9 +255,10 @@ public class EvenementService {
 
     public void sendReminders(List<EvenementDTO> listEvenementDTOs) {
         for (EvenementDTO evenementDTO : listEvenementDTOs(listEvenementDTOs)) {
-            System.out.println("Date======================" + evenementDTO.getDate());
-            System.out.println("Heure======================" + evenementDTO.getHeure());
+            // System.out.println("Date======================" + evenementDTO.getDate());
+            // System.out.println("Heure======================" + evenementDTO.getHeure());
             sendNotification(evenementDTO);
+            modifierSentReminder(true, evenementDTO.getId());
 
         }
     }
@@ -331,6 +329,10 @@ public class EvenementService {
             text = "";
         }
         return text;
+    }
+
+    public int modifierSentReminder(boolean sentReminder, int id) {
+        return evenementRepository.updateRemimderSent(sentReminder, id);
     }
 
 }

@@ -37,10 +37,12 @@ public class FormeController {
 
     @GetMapping("/listeEvenement")
     String listeEvenement(Model model, Principal principal) {
-        System.out.println("Prenom de l'utilisateur====================" + userService.getPrenomUser());
+        // System.out.println("Prenom de l'utilisateur====================" +
+        // userService.getPrenomUser());
         model.addAttribute("evenements", evenementService.listEvenementDTOs());
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+        evenementService.listEvenementDTOs(evenementService.listEvenementDTOs());
         return "listeEvenement";
     }
 

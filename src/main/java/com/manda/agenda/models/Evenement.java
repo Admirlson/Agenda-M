@@ -2,6 +2,7 @@ package com.manda.agenda.models;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,10 @@ public class Evenement {
     private String objectif;
     private String statut;
     private LocalDate nouvelleDate;
+
+    @Column(columnDefinition = "TEXT")
     private String suivis;
+
     private String whocreated;
     private LocalDate datecreated;
     private String whomodified;
