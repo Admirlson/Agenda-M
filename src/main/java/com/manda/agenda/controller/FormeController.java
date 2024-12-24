@@ -68,8 +68,14 @@ public class FormeController {
         model.addAttribute("evenements", evenementService.listEvenementDTOs());
         model.addAttribute("optionFormat", List.of("En ligne", "Présentiel"));
         model.addAttribute("optionType", List.of("Interne", "Externe"));
+        model.addAttribute("optionHeure",
+                List.of("1h am", "2h am", "3h am", "4h am", "5h am", "6h am", "7h am", "8h am",
+                        "9h am", "10h am", "11h am", "Midi", "1h pm", "2h pm", "3h pm", "4h pm", "5h pm", "6h pm",
+                        "7h pm", "8h pm",
+                        "9h pm", "10h pm", "11h pm", "Minuit"));
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
+
         return "modifierEvenement";
     }
 

@@ -94,7 +94,10 @@
                 </div>
                 <div class="input-group mb-3">
                     <label for="heure" class="form-label">Heure</label>
-                    <input type="text" class="form-control" id="heure" name="heure" th:value="${evenement.heure}">
+                    <select name="heure" id="heure" class="form-control">
+                        <option th:each="heure:${optionHeure}" th:value="${heure}" th:text="${heure}" th:selected="${heure==evenement.heure}"></option>
+                        
+                    </select>
                 </div>
                 <div class="input-group mb-3">
                     <label for="institution" class="form-label">Institutions</label>
