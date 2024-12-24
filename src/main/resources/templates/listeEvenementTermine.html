@@ -81,9 +81,9 @@
                             <form action="">
                                 <button formaction="/listeEvenement" style="border: none;">Tous</button>
                                 <button formaction="/user/evenement/planifer" style="border: none;">Planifiés</button>
-                                <button formaction="/user/evenement/reporter" style="background-color: blue;color: white; border: none;">Reportés</button>
+                                <button formaction="/user/evenement/reporter" style="border: none;">Reportés</button>
                                 <button formaction="/user/evenement/annuler" style="border: none;">Annulés</button>
-                                <button formaction="/user/evenement/terminer" style="border: none;">Terminés</button>
+                                <button formaction="/user/evenement/terminer" style="background-color: blue;color: white; border: none;">Terminés</button>
                             </form>
                         </div>
                         <div class="table-responsive">
@@ -111,7 +111,7 @@
                                         <td th:text="${evenement.objectif}"></td>
                                         <td th:text="${evenement.statut}"></td>
                                         <td th:text="${evenement.nouvelleDate}"></td>
-                                        <td th:text="${evenement.suivis}"></td>
+                                        <td><a th:href="@{/user/listeEvenement/{id}(id=${evenement.id})}">Cliquez pour modifier</a>[[${evenement.suivis}]]</td>
                                         <td class="input-group1">
                                             <form action="" method="post">
                                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">

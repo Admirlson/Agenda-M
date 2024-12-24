@@ -12,7 +12,7 @@ public class EvenementMapperImpl implements EvenementMapper {
                 evenementDTO.getType(), evenementDTO.getHeure(), evenementDTO.getInstitution(),
                 evenementDTO.getObjectif(), evenementDTO.getStatut(), evenementDTO.getNouvelleDate(),
                 evenementDTO.getSuivis(), evenementDTO.getWhocreated(), evenementDTO.getDatecreated(),
-                evenementDTO.getWhomodified(), evenementDTO.getDatemodified(), evenementDTO.isReminderSent());
+                evenementDTO.getWhomodified(), evenementDTO.getDatemodified(), evenementDTO.isRemimderSent());
     }
 
     @Override

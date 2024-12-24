@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.kernel.geom.PageSize;
@@ -31,6 +32,8 @@ import com.manda.agenda.mappers.EvenementMapper;
 import com.manda.agenda.models.Evenement;
 import com.manda.agenda.repositories.EvenementRepository;
 import com.manda.agenda.utilitaires.HeaderEventHandler;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class EvenementService {
@@ -61,7 +64,7 @@ public class EvenementService {
             evenement.setDatecreated(evenement.getDatecreated());
             evenement.setWhomodified(evenementDTO.getWhomodified());
             evenement.setDatemodified(evenementDTO.getDatemodified());
-            evenement.setRemimderSent(evenementDTO.isReminderSent());
+            evenement.setRemimderSent(evenementDTO.isRemimderSent());
             return evenementMapper.toEvenementDTO(evenementRepository.save(evenement));
         }).orElseThrow(() -> new RuntimeException("Agent introuvable"));
     }
@@ -85,6 +88,11 @@ public class EvenementService {
         return evenementDTOs;
     }
 
+    public List<Evenement> listEvenements() {
+
+        return evenementRepository.findAll();
+    }
+
     @SuppressWarnings("resource")
     public byte[] listeEvenement(List<EvenementDTO> evenements) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -93,7 +101,9 @@ public class EvenementService {
             // initialiser le document
             PdfWriter pdfWriter = new PdfWriter(byteArrayOutputStream);
             PageSize landscape = PageSize.A4.rotate();
+            // PageSize legal = new PageSize(1008, 612);
             PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+            // pdfDocument.setDefaultPageSize(legal);
             pdfDocument.setDefaultPageSize(landscape);
 
             String image = "static/images/logo.png";
@@ -136,7 +146,8 @@ public class EvenementService {
                 Table table = new Table(longueColonne).setHorizontalAlignment(HorizontalAlignment.CENTER);
 
                 // Ajout des en-têtes
-                table.addHeaderCell(new Cell().add(new Paragraph("Date")));
+                table.addHeaderCell(new Cell().add(new Paragraph("Date")))
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
                 table.addHeaderCell(new Cell().add(new Paragraph("Format")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Type")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Heure")));
@@ -214,27 +225,29 @@ public class EvenementService {
         return byteArrayOutputStream.toByteArray();
     }
 
+    private List<Evenement> list = new ArrayList<Evenement>();;
+
     @SuppressWarnings("null")
-    public List<EvenementDTO> listEvenementDTOs(List<EvenementDTO> listEvenementDTOs) {
+    public List<Evenement> listEvenementDTOs(List<Evenement> listEvenementDTOs) {
         LocalDate tomorrowStart = LocalDate.now().plusDays(1);
         // LocalDateTime tomorrowEnd = tomorrowStart.plusDays(1).minusSeconds(0);
-        List<EvenementDTO> list = null;
+
         try {
-            list = new ArrayList<EvenementDTO>();
+
             for (int i = 0; i < listEvenementDTOs.size(); i++) {
-                if (!listEvenementDTOs.get(i).isReminderSent()) {
-                    list.add(new EvenementDTO(listEvenementDTOs.get(i).getId(), listEvenementDTOs.get(i).getDate(),
+                if (!listEvenementDTOs.get(i).isRemimderSent()) {
+                    list.add(new Evenement(listEvenementDTOs.get(i).getId(), listEvenementDTOs.get(i).getDate(),
                             listEvenementDTOs.get(i).getFormat(), listEvenementDTOs.get(i).getType(),
                             listEvenementDTOs.get(i).getHeure(), listEvenementDTOs.get(i).getInstitution(),
                             listEvenementDTOs.get(i).getObjectif(), listEvenementDTOs.get(i).getStatut(),
                             listEvenementDTOs.get(i).getNouvelleDate(), listEvenementDTOs.get(i).getSuivis(),
                             listEvenementDTOs.get(i).getWhocreated(), listEvenementDTOs.get(i).getDatecreated(),
                             listEvenementDTOs.get(i).getWhomodified(), listEvenementDTOs.get(i).getDatemodified(),
-                            listEvenementDTOs.get(i).isReminderSent()));
+                            listEvenementDTOs.get(i).isRemimderSent()));
                 }
             }
-            // System.out.println("Size de la liste qu'on a pas encore envoyé de
-            // notfication====" + list.size());
+            // System.out.println("Size de la liste qu'on a pas encore envoyé
+            // denotfication====" + list.size());
 
         } catch (Exception ex) {
         }
@@ -253,20 +266,55 @@ public class EvenementService {
     // System.out.println("tomorrowEnd=======:" + tomorrowEnd);
     // }
 
-    public void sendReminders(List<EvenementDTO> listEvenementDTOs) {
-        for (EvenementDTO evenementDTO : listEvenementDTOs(listEvenementDTOs)) {
+    @Scheduled(cron = "0 30 11 * * ?")
+    public void sendReminders() {
+        // System.out.println("Apres sendReminders=============================12" +
+        // list.size());
+        for (Evenement evenement : listEvenementDTOs(evenementRepository.findAll())) {
             // System.out.println("Date======================" + evenementDTO.getDate());
             // System.out.println("Heure======================" + evenementDTO.getHeure());
-            sendNotification(evenementDTO);
-            modifierSentReminder(true, evenementDTO.getId());
+            sendNotification(evenement);
+            modifierSentReminder(true, evenement.getId());
 
         }
+
     }
 
-    private void sendNotification(EvenementDTO evenementDTO) {
-        System.out.println("Date sendNotification======================" + evenementDTO.getDate());
-        senderMail("eugeneadelain@yahoo.fr", "Rappel: Évenement prévu demain",
-                "L'évènement \"" + evenementDTO.getFormat() + "\"à l'" + evenementDTO.getType());
+    private void sendNotification(Evenement evenement) {
+        System.out.println("Date sendNotification======================" + evenement.getDate());
+        senderMail("eugeneadelain@yahoo.fr", "Rappel: Évenement prévu demain ",
+                "L'événement est prévu pour demain à " + evenement.getHeure() + " et il sera organisé "
+                        + evenement.getFormat() +
+                        " avec la participation des institutions " + evenement.getInstitution() + "."
+                        + " L'objectif principal est " + evenement.getObjectif() + "." + "\n"
+                        + "L'évènement se fera à l'"
+                        + evenement.getType());
+
+        senderMail("fgerald07@yahoo.fr", "Rappel: Évenement prévu demain ",
+                "L'événement est prévu pour demain à " + evenement.getHeure() + " et il sera organisé "
+                        + evenement.getFormat() +
+                        " avec la participation des institutions " + evenement.getInstitution() + "."
+                        + " L'objectif principal est " + evenement.getObjectif() + "." + "\n"
+                        + "L'évènement se fera à l'"
+                        + evenement.getType());
+        senderMail("ametellus@yahoo.com", "Rappel: Évenement prévu demain ",
+                "L'événement est prévu pour demain à " + evenement.getHeure() + " et il sera organisé "
+                        + evenement.getFormat() +
+                        " avec la participation des institutions " + evenement.getInstitution() + "."
+                        + " L'objectif principal est " + evenement.getObjectif() + "." + "\n"
+                        + "L'évènement se fera à l'"
+                        + evenement.getType() + ".");
+
+        senderMail("bureauduministremef@gmail.com", "Rappel: Évenement prévu demain ",
+                "L'événement est prévu pour demain à " + evenement.getHeure() + " et il sera organisé "
+                        + evenement.getFormat() +
+                        " avec la participation des institutions " + evenement.getInstitution() + "."
+                        + " L'objectif principal est " + evenement.getObjectif() + "." + "\n"
+                        + "L'évènement se fera à l'"
+                        + evenement.getType() + ".");
+        // senderMail("adelaineugene@yahoo.fr", "Rappel: Évenement prévu demain",
+        // "L'évènement \"" + evenementDTO.getFormat() + "\"à l'" +
+        // evenementDTO.getType());
     }
 
     @Autowired
@@ -307,6 +355,7 @@ public class EvenementService {
     /**
      * @return JavaMailSender return the mailSender
      */
+
     public JavaMailSender getMailSender() {
         return mailSender;
     }
@@ -331,8 +380,23 @@ public class EvenementService {
         return text;
     }
 
+    @Transactional
     public int modifierSentReminder(boolean sentReminder, int id) {
         return evenementRepository.updateRemimderSent(sentReminder, id);
+    }
+
+    /**
+     * @return List<Evenement> return the list
+     */
+    public List<Evenement> getList() {
+        return list;
+    }
+
+    /**
+     * @param list the list to set
+     */
+    public void setList(List<Evenement> list) {
+        this.list = list;
     }
 
 }

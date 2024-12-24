@@ -48,7 +48,7 @@
                             <div class="d-flex" >
                         
                                 <div class="menu">
-                                    <a class="nav-link" href="">Bienvenu [[${prenom}]]</a>
+                                    <a class="nav-link" href="#">Bienvenu [[${prenom}]]</a>
                                     <div class="menu-content">
                                         
                                         <a class="nav-link " href="" >
@@ -83,6 +83,7 @@
                                 <button formaction="/user/evenement/planifer" style="border: none;">Planifiés</button>
                                 <button formaction="/user/evenement/reporter" style="border: none;">Reportés</button>
                                 <button formaction="/user/evenement/annuler" style="border: none;">Annulés</button>
+                                <button formaction="/user/evenement/terminer" style="border: none;">Terminés</button>
                             </form>
                         </div>
                         <div class="table-responsive">
@@ -110,7 +111,8 @@
                                         <td th:text="${evenement.objectif}"></td>
                                         <td th:text="${evenement.statut}"></td>
                                         <td th:text="${evenement.nouvelleDate}"></td>
-                                        <td th:text="${evenement.suivis}"></td>
+                                        <!-- <td><a href=""></a></td> -->
+                                        <td><a th:href="@{/user/listeEvenement/{id}(id=${evenement.id})}">Cliquez pour modifier</a>[[${evenement.suivis}]]</td>
                                         <td class="input-group1">
                                             <form action="" method="post">
                                                 <input type="hidden" name="_csrf" th:value="${_csrf.token}">
@@ -212,7 +214,7 @@
                 <div class="modal-footer">
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}">
                     <input type="hidden" name="id" id="id" th:value="${evenementId}">
-                    <textarea name="suivis" id="" placeholder="Suivis" required></textarea >
+                    <textarea name="suivis" id="" placeholder="Suivis" style="width: 300px;height: 300px;" required></textarea >
                     <button formaction="/user/validerTerminerEvenement" class="btn btn-secondary">Continuer</button>
                     <button onclick="fermetureModalTerminerEvenement()" formaction="/annuler" class="btn btn-primary">Annuler</button>
                 </div>
@@ -222,6 +224,36 @@
       </div>
   
       <!-- End Modal Terminé Evenement-->
+
+       <!-- Modal Modifier suivis-->
+
+    <div th:if="${modalModifierSuiviVisible!=null}" class="modal fade show"  tabindex="-1" style="background: rgba(0, 0, 0, 0.5);display: block;"  id="id-modal-terminierEvenevent">
+        <div class="modal-dialog ">
+          <div class="modal-content">
+            <div class="modal-header d-flex">
+              <h5 class="modal-title">Suivis!!!</h5>
+              <form action="" method="post" style="margin-left: auto;">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                <button onclick="fermetureModalTerminerEvenement()" formaction="/annuler"   class="ms-auto btn-close " data-bs-dismiss="modal" aria-label="Close" id="close-modal-artist1"></button>
+              </form>
+            </div>
+            <!-- <div class="modal-body">
+                <p>Vous venez d'activer le champ Terminer réunion.Remplissez le champ suivis pour contitinuer.</p>
+            </div> -->
+            <form method="post" >
+                <div class="modal-footer">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                    <input type="hidden" name="id" id="id" th:value="${evenementId}">
+                    <textarea name="suivis" id="" th:text="${suivis}" placeholder="Suivis" style="width: 300px;height: 300px;" required></textarea >
+                    <button formaction="/user/validerTerminerEvenement" class="btn btn-secondary">Continuer</button>
+                    <button onclick="fermetureModalTerminerEvenement()" formaction="/annuler" class="btn btn-primary">Annuler</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+  
+      <!-- End Modal Modifier suivis-->
 
 
       <!-- Modal Modifier-->

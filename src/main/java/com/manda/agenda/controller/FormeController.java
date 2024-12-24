@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -42,7 +43,7 @@ public class FormeController {
         model.addAttribute("evenements", evenementService.listEvenementDTOs());
         model.addAttribute("username", principal.getName());
         model.addAttribute("prenom", userService.getPrenomUser());
-        evenementService.listEvenementDTOs(evenementService.listEvenementDTOs());
+        evenementService.listEvenementDTOs(evenementService.listEvenements());
         return "listeEvenement";
     }
 
@@ -281,6 +282,15 @@ public class FormeController {
         return "listeEvenementAnnule";
     }
 
+    @GetMapping("/user/evenement/terminer")
+    public String evenementTermine(Model model, Principal principal) {
+        System.out.println("Prenom de l'utilisateur====================" + userService.getPrenomUser());
+        model.addAttribute("evenements", evenementService.listEvenementDTOParStatut("Terminé"));
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("prenom", userService.getPrenomUser());
+        return "listeEvenementTermine";
+    }
+
     @GetMapping("/user/generatPdfParStatut")
     public ResponseEntity<byte[]> generatePdfParStatut(@RequestParam("statut") String statut) {
         byte[] liste = null;
@@ -315,5 +325,17 @@ public class FormeController {
 
         return ResponseEntity.ok().contentType(MediaType.TEXT_PLAIN)
                 .header("Content-Disposition", "attachment; filename=raport.csv").body(liste);
+    }
+
+    @GetMapping("/user/listeEvenement/{id}")
+    public String modifierSuivis(@PathVariable int id, Model model) {
+        EvenementDTO evenementDTO = evenementService.getEvenement(id);
+        System.out.println("Suivis======================" + evenementDTO.getSuivis());
+
+        model.addAttribute("modalModifierSuiviVisible", "oui");
+        model.addAttribute("evenementId", id);
+        model.addAttribute("suivis", evenementDTO.getSuivis());
+
+        return "listeEvenement";
     }
 }

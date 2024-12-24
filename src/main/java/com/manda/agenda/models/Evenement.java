@@ -36,5 +36,6 @@ public class Evenement {
     private LocalDate datecreated;
     private String whomodified;
     private LocalDate datemodified;
+    @Column(name = "remimderSent")
     private boolean remimderSent;
 }

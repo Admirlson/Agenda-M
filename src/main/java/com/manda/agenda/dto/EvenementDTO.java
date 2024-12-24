@@ -44,5 +44,5 @@ public class EvenementDTO {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate datemodified;
 
-    private boolean reminderSent;
+    private boolean remimderSent;
 }
